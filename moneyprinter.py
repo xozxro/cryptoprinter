@@ -338,6 +338,7 @@ while True:
 
 
                 # PUSH DISCORD MESSAGE
+                bot.watching = True
                 pushDiscordMessageSuccess = bot.pushDiscordNotif(data.discordwebhook, type='watching')
                 if pushDiscordMessageSuccess != True:
                     print('[TRADEBOT] CRITICAL ERROR IN DISCORD MESSAGE SYSTEM!')

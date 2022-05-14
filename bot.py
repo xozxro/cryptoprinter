@@ -215,6 +215,8 @@ class tradebot():
         self.buyOrders = {}
         self.sellOrders = {}
         self.triggerEvents = {}
+        self.url = data.discordwebhook
+        self.watching = False
 
         if data.devMode:
             self.accountBalance = 10000
@@ -256,11 +258,11 @@ class tradebot():
         return None
 
 
-    def pushDiscordNotif(self,url,type=''):
+    def pushDiscordNotif(self, url, type=''):
 
         try:
 
-            if type == 'watching':
+            if type == 'watching' or self.watching:
                 color = '3464eb'
                 title = '[Trading Bot] | [READY]'
                 desc = '**Now watching $ETH for a scalp due to an oversold dip.**'
@@ -268,12 +270,12 @@ class tradebot():
             if type == 'sell':
                 color = 'eb3453'
                 title = '[Trading Bot] | [SOLD]'
-                desc = '**Placed a SELL order @ ' + str(self.price)
+                desc = '**Placed a SELL order @ ' + str(self.price) + '**'
 
             if type == 'buy':
                 color = '03fca9'
                 title = '[Trading Bot] | [PURCHASED]'
-                desc = '**Placed a LONG order @ ' + str(self.price)
+                desc = '**Placed a LONG order @ ' + str(self.price) + '**'
 
 
             if type == 'start_msg':
@@ -281,11 +283,11 @@ class tradebot():
                 title = '[Trading Bot] | Enabled.'
                 desc = ''
 
-            content = ''
 
-            webhook = DiscordWebhook(url=url, username='Nyria', content=content)
-            embed = DiscordEmbed(title=title, description=desc, color='03fca9')
+            webhook = DiscordWebhook(url=self.url, username='Nyria', content='')
+            embed = DiscordEmbed(title=title, description=desc, color=color)
             embed.add_embed_field(name='Time', value=str(time.strftime("%H:%M")))
+
 
             if type != 'start_msg':
                 embed.add_embed_field(name='Price', value='$' + str(self.price))
@@ -312,7 +314,7 @@ class tradebot():
             webhook.add_embed(embed)
             response = webhook.execute()
 
-            return True
+            return response
 
         except Exception as exception:
 
