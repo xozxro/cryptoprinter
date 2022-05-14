@@ -20,7 +20,7 @@ import yfinance as yf
 #
 # feel free to fork and edit as you please.
 #
-# [nyriabot.io]
+# [nyriabot.io]\
 
 
 
@@ -277,7 +277,6 @@ class tradebot():
                 title = '[Trading Bot] | [PURCHASED]'
                 desc = '**Placed a LONG order @ ' + str(self.price) + '**'
 
-
             if type == 'start_msg':
                 color = '53eb34'
                 title = '[Trading Bot] | Enabled.'
@@ -311,8 +310,10 @@ class tradebot():
             else:
                 embed.add_embed_field(name='Balance', value='**$' + str(self.accountBalance) + '**')
 
+
             webhook.add_embed(embed)
             response = webhook.execute()
+
 
             return response
 
