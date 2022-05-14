@@ -20,7 +20,7 @@ import yfinance as yf
 #
 # feel free to fork and edit as you please.
 #
-# [nyriabot.io]\
+# [nyriabot.io]
 
 
 
