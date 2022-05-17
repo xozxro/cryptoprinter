@@ -1,5 +1,6 @@
-import bot
+from discord_webhook import DiscordWebhook, DiscordEmbed
 
+import bot
 import data
 from datetime import datetime
 import time
@@ -10,29 +11,83 @@ import traceback
 
 
 
+# [welcome to the infinite money printer]
+# this is a cryptocurrency trading bot developed
+# and maintained by Nyria LLC at
+# github.com/xozxro/cryptogobrr
+#
+# feel free to fork and edit as you please.
+#
+# [nyriabot.io]
+
+
 
 def makeTrade(tradearray,trends,type):
 
 
+
     success = False
+
     if type == 'BUY':
+
+        color = '03fca9'
+        title = '[Trading Bot] | [PURCHASED]'
+        desc = '**Placed a LONG order @ ' + str(bot.priceNum) + '**'
+
         try:
-            success, price = bot.placeOrder('ETHUSD', 'BUY')
+            success, price = bot.placeOrder('SOLUSD', 'BUY')
+
         except Exception as exception:
             print('[!] critical error in order placement.')
             traceback.print_exc()
     else:
+
+        color = 'eb3453'
+        title = '[Trading Bot] | [SOLD]'
+        desc = '**Placed a SELL order @ ' + str(bot.priceNum) + '**'
+
         try:
-            success, price = bot.placeOrder('ETHUSD', 'SELL')
+            success, price = bot.placeOrder('SOLUSD', 'SELL')
+
         except Exception as exception:
             print('[!] critical error in order placement.')
             traceback.print_exc()
+
+    if success:
+
+        try:
+            pushDiscordMessageSuccess = bot.pushDiscordNotif(data.discordwebhook, type=type.lower())
+        except:
+            webhook = DiscordWebhook(url=data.discordwebhook, username='Nyria', content='')
+            embed = DiscordEmbed(title=title, description=desc, color=color)
+            embed.add_embed_field(name='Time', value=str(time.strftime("%H:%M")))
+            embed.add_embed_field(name='Price', value='$' + str(bot.price))
+
+            if type == 'SELL':
+
+                embed.add_embed_field(name='New Balance', value='**$' + str(bot.accountBalance) + '**')
+
+                gain = bot.accountBalance - bot.startingBal
+
+                if gain < 0:
+                    gainText = '**-$' + str(gain) + '**'
+
+                if gain > 0:
+                    gainText = '**+$' + str(gain) + '**'
+
+                else:
+                    gainText = '**$0**'
+
+                embed.add_embed_field(name='Day Gain', value=gainText)
+
+            webhook.add_embed(embed)
+            response = webhook.execute()
 
 
     # log trade
     now = datetime.now()
     dt_string = now.strftime("%d-%m-%Y")
-    with open(dt_string + ' ETHtrades.csv', 'a') as outputcsv:
+    with open(dt_string + ' SOLtrades.csv', 'a') as outputcsv:
         writer_ = csv.writer(outputcsv)
         writer_.writerow(tradearray)
         writer_.writerow(trends)
@@ -50,11 +105,7 @@ def makeTrade(tradearray,trends,type):
         strong = False
 
 
-    if success:
-        # push discord notif
-        pushDiscordMessageSuccess = bot.pushDiscordNotif(data.discordwebhook,type='sell')
-        if pushDiscordMessageSuccess != True:
-            print('[TRADEBOT] CRITICAL ERROR IN DISCORD MESSAGE SYSTEM!')
+
 
 
     return success
@@ -70,7 +121,7 @@ def createCSV():
 
     dt_string = now.strftime("%d-%m-%Y")
 
-    with open(dt_string + ' ETHtrades.csv', 'w') as outputcsv:
+    with open(dt_string + ' SOLtrades.csv', 'w') as outputcsv:
         writer_ = csv.writer(outputcsv)
         writer_.writerow(fields)
         outputcsv.close()
@@ -194,6 +245,7 @@ while True:
     stockOpen = dataDict['stockOpen']
     low = dataDict['low']
     close = dataDict['close']
+    bot.priceNum = close
     volume = dataDict['volume']
     RSI = dataDict['RSI']
     MACD = dataDict['MACD']
@@ -296,12 +348,8 @@ while True:
     # PRINT MESSAGE TO CONSOLE
     print()
 
-    print('[TRADEBOT]         [' + str(current_time) + ']')
-    print('[TRADEBOT]  PRICE | $' + str(round(avgprice,2)))
-    print('[TRADEBOT] VOLUME | ' + str(volume))
-
-
-
+    print('[TRADEBOT]          [' + str(current_time) + ']')
+    print('[TRADEBOT]    PRICE | $' + str(round(avgprice,2)))
 
     # TEST FOR OVERSOLD DIP IN ASSET PRICE
     try:
@@ -317,14 +365,21 @@ while True:
     lowestMACD = 100
     lowestRSI = 100
 
-    if close < VWAP and close < ema12 and close < ema265m and close < ema5 and \
-            (RSI5m < 35 or RSI < 32) and testBool:
+    #print(close)
+    #print(ema12)
+    #print(ema265m)
+    #print(ema5)
+    #print(RSI5m)
+    #print(testBool)
+    #print(MACD)
+    #print(histogram)
+
+    if close < ema12 and close < ema265m and close < ema5 and \
+            (RSI5m < 50) and testBool:
         if (MACD < previous['MACD'][-1] or MACD < previous['MACD'][-2] or MACDdowntrend):
             if histogram < 0:
 
-
                 print('[TRADEBOT] watching for a trade.')
-
 
                 # UPDATE PREVIOUS TRADE DICT
                 previous['VWAP'].append(VWAP)
@@ -366,7 +421,7 @@ while True:
                     current_time = now.strftime("%H:%M:%S")
                     # wait for next minute
                     while minute == lastminute:
-                        time.sleep(1)
+                        time.sleep(2)
                         now = datetime.now()
                         minute = now.strftime("%M")
                     time.sleep(1)
@@ -434,6 +489,9 @@ while True:
                     avgprices = dataDict['avgprices']
                     avgprice = dataDict['avgprice']
                     volumes = dataDict['volumes']
+
+                    print('[TRADEBOT]          [' + str(current_time) + ']')
+                    print('[TRADEBOT]    PRICE | $' + str(round(avgprice, 2)))
 
                     high5m = dataDict5m['high']
                     stockOpen5m = dataDict5m['stockOpen']
@@ -517,8 +575,21 @@ while True:
 
                     # ALGO TO TEST FOR TRADE PLACEMENT
 
-                    lowestMACDtest = -.6
+                    lowestMACDtest = -.08
                     atrVal = abs(close - (previous['stockOpen'][-1])) * 1.5
+
+                    #print(close)
+                    #print(previous['stockOpen'][-4])
+
+                    #print(stockOpen)
+                    #print(ema12)
+                    #print(ema55m)
+                    #print(MACDdowntrend)
+                    #print(lowestMACD)
+                    #print(lowestMACDtest)
+                    #print(RSIdowntrend)
+                    #print(lowestRSI)
+                    #print(ema5)
 
                     if close > previous['stockOpen'][-4] \
                             and (stockOpen > ema12 or close > ema12) and \
@@ -526,10 +597,7 @@ while True:
                             MACDdowntrend is False and \
                             lowestMACD < lowestMACDtest and \
                             RSIdowntrend is False and (
-                            lowestRSI < 30) and (
-                            ema5 > ema12
-                            # close > 3 closes ago by more than one atrVal (distance of this close from last x 1.5)
-                    ):
+                            lowestRSI < 40 and lowestRSI > 25):
 
                         # ESSENTIAL VARS
                         entryPrice = close
@@ -545,9 +613,9 @@ while True:
 
 
 
-                    if lowestMACD < lowestMACDtest and lowestRSI < 30 and ema5 > ema12 and close < ema5 and \
+                    if lowestMACD < lowestMACDtest and lowestRSI < 35 and close > ema5 and \
                             RSIdowntrend is False and (stockOpen > ema55m or close > ema55m) and previous['close'][
-                        -1] > ema55m and close > previous['close'][-3]:
+                        -1] > ema55m and close > previous['close'][-1]:
 
                         # ESSENTIAL VARS
                         entryPrice = close
@@ -597,9 +665,10 @@ while True:
                     current_time = now.strftime("%H:%M:%S")
 
                     while minute == lastminute:
-                        time.sleep(1)
+                        time.sleep(2)
                         now = datetime.now()
                         minute = now.strftime("%M")
+                    time.sleep(1)
 
                     lastminute = minute
 
@@ -659,7 +728,10 @@ while True:
                     avgprice = dataDict['avgprice']
                     volumes = dataDict['volumes']
 
-
+                    print('[TRADEBOT]          [' + str(current_time) + ']')
+                    print('[TRADEBOT]    PRICE | $' + str(round(avgprice, 2)))
+                    print('[TRADEBOT]  OPEN QT | x' + str(bot.openQT))
+                    print('[TRADEBOT] OPEN VAL | $' + str(float(bot.openQT * round(avgprice, 2))))
 
                     # KEEP TRACK OF AVG INDICATOR DIRECTIONS
                     trueCnt = 0
@@ -682,22 +754,17 @@ while True:
 
 
                     # PRICE DIFFERENCE
-                    difference = close - entryPrice
+                    difference = round(avgprice, 2) - entryPrice
                     lastdifference = previous['close'][-1] - entryPrice
 
 
                     # ALGO TO DETERMINE EXITS
-                    if difference > 20:
+                    if difference > .3:
                         tradearray.append('7302734')
                         makeTrade(tradearray, currentTrends, 'SELL')
                         exitNeeded = False
 
-                    elif difference > 10 and difference < 20:
-                        tradearray.append('9472')
-                        makeTrade(tradearray, currentTrends, 'SELL')
-                        exitNeeded = False
-
-                    elif difference > lastdifference + 2:
+                    elif difference > lastdifference + .2:
 
                         if consider == True:
                             makeTrade(tradearray, currentTrends, 'SELL')
@@ -707,10 +774,10 @@ while True:
                         tradearray.append('a8932')
                         consider = True
 
-                    elif difference <= 7:
+                    elif difference <= -.15:
                         tradearray.append('a893')
 
-                        if consider == True or difference <= 8:
+                        if consider == True or difference <= .2:
                             tradearray.append('894')
                             makeTrade(tradearray, currentTrends, 'SELL')
                             exitNeeded = False
@@ -743,6 +810,7 @@ while True:
     minute = now.strftime("%M")
 
     while minute == lastminute:
-        time.sleep(1)
+        time.sleep(2)
         now = datetime.now()
         minute = now.strftime("%M")
+    time.sleep(1)

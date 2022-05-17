@@ -1,17 +1,13 @@
+import time
 import traceback
 from datetime import datetime
-import os
-import json
-import pandas as pd
-import plotly.graph_objects as go
-import requests
-import time
-
 from discord_webhook import DiscordWebhook, DiscordEmbed
-
 from client import FtxClient
 import data
 import yfinance as yf
+
+
+
 
 # [welcome to the infinite money printer]
 # this is a cryptocurrency trading bot developed
@@ -20,7 +16,7 @@ import yfinance as yf
 #
 # feel free to fork and edit as you please.
 #
-# [nyriabot.io]\
+# [nyriabot.io]
 
 
 
@@ -35,18 +31,18 @@ def getMarketData(avgprices, volumes, interval='1m'):
     while running:
 
         try:
-            data = yf.download(tickers='ETH-USD', period='1d', interval=interval, threads=False, progress=False)
+            data = yf.download(tickers='SOL-USD', period='1d', interval=interval, threads=False, progress=False)
             running = False
 
         except:
 
             try:
                 if interval == '1m':
-                    data = yf.download(tickers='ETH-USD', period='5d', interval=interval, threads=False, progress=False)
+                    data = yf.download(tickers='SOL-USD', period='5d', interval=interval, threads=False, progress=False)
                     running = False
                 else:
                     time.sleep(5)
-                    data = yf.download(tickers='ETH-USD', period='1d', interval=interval, threads=False, progress=False)
+                    data = yf.download(tickers='SOL-USD', period='1d', interval=interval, threads=False, progress=False)
                     running = False
 
             except Exception as exception:
@@ -65,10 +61,6 @@ def getMarketData(avgprices, volumes, interval='1m'):
     ####################################
     ############## calculate VWAP
     open_last, high_last, low_last, close_last, volume_last = df['Open'].iloc[1], df['High'].iloc[1], df['Low'].iloc[1], df['Close'].iloc[1], df['Volume'].iloc[1]
-
-    now = datetime.now()
-    minute = now.strftime("%M")
-    hour = now.strftime("%H")
 
     # sum all to calculate indicators <<<< --
 
@@ -217,6 +209,7 @@ class tradebot():
         self.triggerEvents = {}
         self.url = data.discordwebhook
         self.watching = False
+        self.openQT = 0
 
         if data.devMode:
             self.accountBalance = 10000
@@ -228,26 +221,29 @@ class tradebot():
         print('[TRADEBOT] account balance: $' + str(self.accountBalance))
 
 
-    def getPrice(self, avgprices, volumes, interval='1m', coin='ETH/USD'):
+    def getPrice(self, avgprices, volumes, interval='1m', coin='SOL/USD'):
 
         self.price = getMarketData(avgprices, volumes, interval=interval)
+        self.priceNum = round(self.price['close'],2)
 
         return self.price
 
 
     def placeOrder(self, coin, type):
 
-        success = False
+        success = True
         # actual purchase code will be here
-        price = self.price
+        price = self.priceNum
 
         if success:
             if type == 'BUY':
                 self.accountBalance -= price
+                self.openQT = self.accountBalance / price
 
             else:
                 print('[TRADEBOT] placing SELL order at ' + str(price))
-                self.accountBalance += price
+                self.accountBalance += (price*self.openQT)
+                self.openQT = 0
 
         return success,price
 
@@ -263,59 +259,68 @@ class tradebot():
         try:
 
             if type == 'watching' or self.watching:
-                color = '3464eb'
-                title = '[Trading Bot] | [READY]'
-                desc = '**Now watching $ETH for a scalp due to an oversold dip.**'
+                self.color = '3464eb'
+                self.title = '[READY]'
+                self.desc = '**Now watching $SOL for a scalp due to an oversold dip.**'
 
             if type == 'sell':
-                color = 'eb3453'
-                title = '[Trading Bot] | [SOLD]'
-                desc = '**Placed a SELL order @ ' + str(self.price) + '**'
+                self.color = 'eb3453'
+                self.title = '[SOLD]'
+                self.desc = '**Placed a SELL order @ ' + str(self.priceNum) + '**'
 
             if type == 'buy':
-                color = '03fca9'
-                title = '[Trading Bot] | [PURCHASED]'
-                desc = '**Placed a LONG order @ ' + str(self.price) + '**'
+                self.color = '03fca9'
+                self.title = '[PURCHASED]'
+                self.desc = '**Placed a LONG order @ ' + str(self.priceNum) + '**'
 
             if type == 'start_msg':
-                color = '53eb34'
-                title = '[Trading Bot] | Enabled.'
-                desc = ''
+                self.color = '53eb34'
+                self.title = 'Trading Bot [ENABLED]'
+                self.desc = ''
 
 
-            webhook = DiscordWebhook(url=self.url, username='Nyria', content='')
-            embed = DiscordEmbed(title=title, description=desc, color=color)
-            embed.add_embed_field(name='Time', value=str(time.strftime("%H:%M")))
+            try:
+                self.webhook = DiscordWebhook(url=self.url, username='Nyria', content='')
+                self.embed = DiscordEmbed(title=self.title, description=self.desc, color=self.color)
+                self.embed.add_embed_field(name='Time', value=str(time.strftime("%H:%M")))
 
+                if type != 'start_msg':
+                    self.embed.add_embed_field(name='Price', value='**$' + str(round(self.priceNum,2)) + '**')
 
-            if type != 'start_msg':
-                embed.add_embed_field(name='Price', value='$' + str(self.price))
+                    if type == 'sell':
+                        self.embed.add_embed_field(name='New Balance', value='**$' + str(self.accountBalance) + '**')
 
-                if type == 'sell':
-                    embed.add_embed_field(name='New Balance', value='**$' + str(self.accountBalance) + '**')
+                        self.gain = self.accountBalance - self.startingBal
 
-                    gain = self.accountBalance - self.startingBal
+                        if self.gain < 0:
+                            self.gainText = '**-$' + str(self.gain) + '**'
 
-                    if gain < 0:
-                        gain = '** -$' + str(gain) + '**'
+                        if self.gain > 0:
+                            self.gainText = '**+$' + str(self.gain) + '**'
 
-                    if gain > 0:
-                        gain = '** +$' + str(gain) + '**'
+                        else:
+                            self.gainText = '**$0**'
 
-                    else:
-                        gain = 0
+                        self.embed.add_embed_field(name='Day Gain', value=self.gainText)
 
-                    embed.add_embed_field(name='Day Gain', value=gain)
+                else:
 
-            else:
-                embed.add_embed_field(name='Balance', value='**$' + str(self.accountBalance) + '**')
+                    self.embed.add_embed_field(name='Balance', value='**$' + str(self.accountBalance) + '**')
 
+            except Exception as exception:
 
-            webhook.add_embed(embed)
-            response = webhook.execute()
+                print(1)
 
+                traceback.print_exc()
 
-            return response
+            #print(embed)
+
+            self.webhook.add_embed(self.embed)
+            response = self.webhook.execute()
+
+            #print(response)
+
+            return True
 
         except Exception as exception:
 
