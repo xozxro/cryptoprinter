@@ -375,7 +375,7 @@ while True:
     #print(histogram)
 
     if close < ema12 and close < ema265m and close < ema5 and \
-            (RSI5m < 50) and testBool:
+            (RSI5m < 40) and testBool:
         if (MACD < previous['MACD'][-1] or MACD < previous['MACD'][-2] or MACDdowntrend):
             if histogram < 0:
 
@@ -591,13 +591,13 @@ while True:
                     #print(lowestRSI)
                     #print(ema5)
 
-                    if close > previous['stockOpen'][-4] \
+                    if close > previous['stockOpen'][-2] \
                             and (stockOpen > ema12 or close > ema12) and \
                             (stockOpen > ema55m or close > ema55m) and \
                             MACDdowntrend is False and \
                             lowestMACD < lowestMACDtest and \
                             RSIdowntrend is False and (
-                            lowestRSI < 40 and lowestRSI > 25):
+                            lowestRSI < 35 and lowestRSI > 25):
 
                         # ESSENTIAL VARS
                         entryPrice = close
@@ -607,15 +607,16 @@ while True:
                         # TAKE THE TRADE
                         makeTrade(tradearray, currentTrends, 'BUY')  # PASS TRADEARRAY FOR DATA AND CURRENTTRENDS
                         print('[TRADEBOT] placing LONG trade at ' + str(round(close, 2)))
+                        print('[TRADEBOT] algo A')
                         # ESSENTIAL VARS
                         exitNeeded = True
                         trade = False
 
 
 
-                    if lowestMACD < lowestMACDtest and lowestRSI < 35 and close > ema5 and \
+                    if lowestMACD < lowestMACDtest and lowestRSI < 30 and close > ema5 and \
                             RSIdowntrend is False and (stockOpen > ema55m or close > ema55m) and previous['close'][
-                        -1] > ema55m and close > previous['close'][-1]:
+                        -1] > ema55m and close > previous['close'][-4]:
 
                         # ESSENTIAL VARS
                         entryPrice = close
@@ -625,6 +626,7 @@ while True:
                         # TAKE THE TRADE
                         makeTrade(tradearray, currentTrends, 'BUY') # PASS TRADEARRAY FOR DATA AND CURRENTTRENDS
                         print('[TRADEBOT] placing LONG trade at ' + str(round(close,2)))
+                        print('[TRADEBOT] algo B')
                         # ESSENTIAL VARS
                         exitNeeded = True
                         trade = False
@@ -647,7 +649,6 @@ while True:
                 while exitNeeded:
 
 
-
                     # KEEP TRACK OF PREVIOUS DATA - THIS is used if trade is FALSE due to an exit.
                     previous['VWAP'].append(VWAP)
                     previous['close'].append(close)
@@ -656,7 +657,6 @@ while True:
                     previous['STOCH'].append(STOCH)
                     previous['ema12'].append(ema12)
                     previous['stockOpen'].append(stockOpen)
-
 
 
                     # KEEP TRACK OF TIME
@@ -759,12 +759,12 @@ while True:
 
 
                     # ALGO TO DETERMINE EXITS
-                    if difference > .3:
+                    if difference > .35:
                         tradearray.append('7302734')
                         makeTrade(tradearray, currentTrends, 'SELL')
                         exitNeeded = False
 
-                    elif difference > lastdifference + .2:
+                    elif difference > lastdifference + .15:
 
                         if consider == True:
                             makeTrade(tradearray, currentTrends, 'SELL')
@@ -774,7 +774,8 @@ while True:
                         tradearray.append('a8932')
                         consider = True
 
-                    elif difference <= -.15:
+                    elif difference <= -.13:
+
                         tradearray.append('a893')
 
                         if consider == True or difference <= .2:
