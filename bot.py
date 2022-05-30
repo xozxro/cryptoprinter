@@ -212,7 +212,7 @@ class tradebot():
         self.openQT = 0
 
         if data.devMode:
-            self.accountBalance = 10026
+            self.accountBalance = 10369.19
         else:
             self.accountBalance = self.client.get_total_usd_balance()
 
@@ -272,6 +272,43 @@ class tradebot():
         else:
             self.openGain = 0
             self.openVal = 0
+
+
+    def updateMessage(self):
+
+        self.webhook = DiscordWebhook(url=self.url, username='Nyria', content='')
+        self.embed = DiscordEmbed(title='[STATUS UPDATE]', description='', color='4200FF')
+        self.embed.add_embed_field(name='Time', value=str(time.strftime("%H:%M")))
+        self.embed.add_embed_field(name='Account Balance', value='**$' + str(self.accountBalance) + '**')
+        self.embed.add_embed_field(name='Current Price', value='$' + str(self.priceNum))
+        self.embed.add_embed_field(name='Open QT', value='x **' + str(self.openQT) + '**')
+        self.embed.add_embed_field(name='Market Value', value='$' + str(self.openVal))
+
+        if self.openGain < 0:
+            gainPerc = '-' + str(round((self.openGain / self.buyVal) * 100, 2)) + '%'
+            self.gainText = '**-$' + str(self.openGain) + '**' + ' (' + gainPerc + ')'
+
+        if self.openGain > 0:
+            gainPerc = '+' + str(round((self.openGain / self.buyVal) * 100, 2)) + '%'
+            self.gainText = '**+$' + str(self.openGain) + '**' + ' (' + gainPerc + ')'
+
+        else:
+            self.gainText = '**$0**'
+
+        self.embed.add_embed_field(name='Open Gain', value=self.gainText)
+
+        if self.dayGain < 0:
+            gainPerc = '-' + str(round((self.dayGain / self.startingBal) * 100, 2)) + '%'
+            self.gainText = '**-$' + str(self.dayGain) + '**' + ' (' + gainPerc + ')'
+
+        if self.dayGain > 0:
+            gainPerc = '+' + str(round((self.dayGain / self.startingBal) * 100, 2)) + '%'
+            self.gainText = '**+$' + str(self.dayGain) + '**' + ' (' + gainPerc + ')'
+
+        else:
+            self.gainText = '**$0**'
+
+        self.embed.add_embed_field(name='Day Gain', value=self.gainText)
 
 
     def pushDiscordNotif(self, url, type=''):

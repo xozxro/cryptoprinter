@@ -645,9 +645,18 @@ while True:
 
                 consider = False
 
+                loopNum = 0
+
                 # TRADE HAS BEEN PLACED. WE MUST EXIT TO PLACE NEXT TRADE.
                 while exitNeeded:
 
+                    # LOG AND RECORD DATA TO DISCORD
+                    loopNum += 1
+
+                    bot.logData()
+
+                    if loopNum == 5:
+                        bot.updateMessage()
 
                     # KEEP TRACK OF PREVIOUS DATA - THIS is used if trade is FALSE due to an exit.
                     previous['VWAP'].append(VWAP)
@@ -657,7 +666,6 @@ while True:
                     previous['STOCH'].append(STOCH)
                     previous['ema12'].append(ema12)
                     previous['stockOpen'].append(stockOpen)
-
 
                     # KEEP TRACK OF TIME
                     now = datetime.now()
