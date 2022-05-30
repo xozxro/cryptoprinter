@@ -266,7 +266,7 @@ class tradebot():
 
         self.dayGain = self.accountBalance - self.startingBal
         if self.openQT != 0:
-            self.openGain = (self.openQT * self.priceNUm) - (self.openQT * self.buyPrice)
+            self.openGain = (self.openQT * self.priceNum) - (self.openQT * self.buyPrice)
             self.openVal = self.openQT * self.priceNum
 
         else:
