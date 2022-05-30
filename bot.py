@@ -212,7 +212,7 @@ class tradebot():
         self.openQT = 0
 
         if data.devMode:
-            self.accountBalance = 10000
+            self.accountBalance = 10026
         else:
             self.accountBalance = self.client.get_total_usd_balance()
 
@@ -225,6 +225,8 @@ class tradebot():
 
         self.price = getMarketData(avgprices, volumes, interval=interval)
         self.priceNum = round(self.price['close'],2)
+        if self.openQT != 0: self.openVal = self.priceNum * self.openQT
+        else: self.openVal = 0
 
         return self.price
 
@@ -237,13 +239,19 @@ class tradebot():
 
         if success:
             if type == 'BUY':
-                self.accountBalance -= price
-                self.openQT = self.accountBalance / price
+                self.openQT = self.accountBalance / self.priceNum
+                self.cash = self.accountBalance - (self.priceNum * self.openQT)
+                self.buyPrice = self.priceNum
+                self.buyQT = self.openQT
+                self.buyVal = self.buyPrice * self.buyQT
+                self.logData()
 
             else:
-                print('[TRADEBOT] placing SELL order at ' + str(price))
-                self.accountBalance += (price*self.openQT)
+                print('[TRADEBOT] placing SELL order at ' + str(self.priceNum))
+                self.accountBalance = self.cash + (self.priceNum*self.openQT)
+                self.cash = self.accountBalance
                 self.openQT = 0
+                self.logData()
 
         return success,price
 
@@ -252,6 +260,18 @@ class tradebot():
 
         # to do - will allow bot to handle positions and orders
         return None
+
+
+    def logData(self):
+
+        self.dayGain = self.accountBalance - self.startingBal
+        if self.openQT != 0:
+            self.openGain = (self.openQT * self.priceNUm) - (self.openQT * self.buyPrice)
+            self.openVal = self.openQT * self.priceNum
+
+        else:
+            self.openGain = 0
+            self.openVal = 0
 
 
     def pushDiscordNotif(self, url, type=''):
@@ -285,18 +305,41 @@ class tradebot():
                 self.embed.add_embed_field(name='Time', value=str(time.strftime("%H:%M")))
 
                 if type != 'start_msg':
+
                     self.embed.add_embed_field(name='Price', value='**$' + str(round(self.priceNum,2)) + '**')
+                    self.embed.add_embed_field(name='QT', value='**x ' + str(self.openQT) + '**')
+                    self.embed.add_embed_field(name='Value', value='**$' + str(self.openVal) + '**')
+
+                    if type == 'buy': self.embed.add_embed_field(name='Value', value='**$' + str(self.openVal) + '**')
 
                     if type == 'sell':
-                        self.embed.add_embed_field(name='New Balance', value='**$' + str(self.accountBalance) + '**')
 
-                        self.gain = self.accountBalance - self.startingBal
+                        self.embed.add_embed_field(name='Bought Price', value='$' + str(round(self.buyPrice, 2)))
+                        self.embed.add_embed_field(name='Bought Value', value='$' + str(self.buyVal))
+                        self.embed.add_embed_field(name='Sold Value', value='**$' + str(self.openVal) + '**')
 
-                        if self.gain < 0:
-                            self.gainText = '**-$' + str(self.gain) + '**'
+                        self.embed.add_embed_field(name='New Balance', value='**$' + str(round(self.accountBalance,2)) + '**')
 
-                        if self.gain > 0:
-                            self.gainText = '**+$' + str(self.gain) + '**'
+                        if self.openGain < 0:
+                            gainPerc = '-' + str(round((self.openGain / self.buyVal) * 100,2)) + '%'
+                            self.gainText = '**-$' + str(self.openGain) + '**' + ' (' + gainPerc + ')'
+
+                        if self.openGain > 0:
+                            gainPerc = '+' + str(round((self.openGain / self.buyVal) * 100,2)) + '%'
+                            self.gainText = '**+$' + str(self.openGain) + '**' + ' (' + gainPerc + ')'
+
+                        else:
+                            self.gainText = '**$0**'
+
+                        self.embed.add_embed_field(name='Realized Gain', value=self.gainText)
+
+                        if self.dayGain < 0:
+                            gainPerc = '-' + str(round((self.dayGain / self.startingBal) * 100,2)) + '%'
+                            self.gainText = '**-$' + str(self.dayGain) + '**' + ' (' + gainPerc + ')'
+
+                        if self.dayGain > 0:
+                            gainPerc = '+' + str(round((self.dayGain / self.startingBal) * 100, 2)) + '%'
+                            self.gainText = '**+$' + str(self.dayGain) + '**' + ' (' + gainPerc + ')'
 
                         else:
                             self.gainText = '**$0**'

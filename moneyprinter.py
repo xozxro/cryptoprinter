@@ -375,7 +375,7 @@ while True:
     #print(histogram)
 
     if close < ema12 and close < ema265m and close < ema5 and \
-            (RSI5m < 40) and testBool:
+            (RSI5m < 44) and testBool:
         if (MACD < previous['MACD'][-1] or MACD < previous['MACD'][-2] or MACDdowntrend):
             if histogram < 0:
 
@@ -591,7 +591,7 @@ while True:
                     #print(lowestRSI)
                     #print(ema5)
 
-                    if close > previous['stockOpen'][-2] \
+                    if close > previous['close'][-2] \
                             and (stockOpen > ema12 or close > ema12) and \
                             (stockOpen > ema55m or close > ema55m) and \
                             MACDdowntrend is False and \
@@ -616,7 +616,7 @@ while True:
 
                     if lowestMACD < lowestMACDtest and lowestRSI < 30 and close > ema5 and \
                             RSIdowntrend is False and (stockOpen > ema55m or close > ema55m) and previous['close'][
-                        -1] > ema55m and close > previous['close'][-4]:
+                        -1] > ema55m and close > previous['close'][-3]:
 
                         # ESSENTIAL VARS
                         entryPrice = close
@@ -759,12 +759,15 @@ while True:
 
 
                     # ALGO TO DETERMINE EXITS
-                    if difference > .35:
+                    if difference > .4:
                         tradearray.append('7302734')
+                        print('7302734')
                         makeTrade(tradearray, currentTrends, 'SELL')
                         exitNeeded = False
 
-                    elif difference > lastdifference + .15:
+                    elif difference > lastdifference + .12:
+
+                        print('a82352')
 
                         if consider == True:
                             makeTrade(tradearray, currentTrends, 'SELL')
@@ -772,6 +775,7 @@ while True:
                             exitNeeded = False
 
                         tradearray.append('a8932')
+                        print('a8932')
                         consider = True
 
                     elif difference <= -.13:
@@ -780,24 +784,29 @@ while True:
 
                         if consider == True or difference <= .2:
                             tradearray.append('894')
+                            print('894')
                             makeTrade(tradearray, currentTrends, 'SELL')
                             exitNeeded = False
 
                         elif trueCnt >= entryTrueCnt + 2 and trueCnt >= trueCnt_ + 1:
                             tradearray.append('895')
+                            print('895')
                             makeTrade(tradearray, currentTrends, 'SELL')
                             exitNeeded = False
 
                     if trueCnt > entryTrueCnt + 1:
                         tradearray.append('a32235423')
+                        print('a32235423')
                         consider = True
 
                     if trueCnt > trueCnt_ + 1:
                         tradearray.append('a523563')
+                        print('a523563')
                         consider = True
 
                     if trueCnt >= trueCnt__ + 2:
                         tradearray.append('a12345423')
+                        print('a12345423')
                         consider = True
 
                     if minute == lastminute:
