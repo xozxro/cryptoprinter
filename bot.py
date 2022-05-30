@@ -323,16 +323,16 @@ class tradebot():
             if type == 'sell':
                 self.color = 'eb3453'
                 self.title = '[SOLD]'
-                self.desc = '**Placed a SELL order @ ' + str(self.priceNum) + '**'
+                self.desc = '**Placed a SELL order in $SOL @ ' + str(self.priceNum) + '**'
 
             if type == 'buy':
                 self.color = '03fca9'
                 self.title = '[PURCHASED]'
-                self.desc = '**Placed a LONG order @ ' + str(self.priceNum) + '**'
+                self.desc = '**Placed a LONG order in $SOL @ ' + str(self.priceNum) + '**'
 
             if type == 'start_msg':
                 self.color = '53eb34'
-                self.title = 'Trading Bot [ENABLED]'
+                self.title = '[ENABLED]'
                 self.desc = ''
 
 
@@ -385,7 +385,10 @@ class tradebot():
 
                 else:
 
-                    self.embed.add_embed_field(name='Balance', value='**$' + str(self.accountBalance) + '**')
+                    self.embed.add_embed_field(name='Traded Assets', value='**$SOL**')
+
+
+                    self.embed.add_embed_field(name='Starting Balance', value='**$' + str(self.accountBalance) + '**')
 
             except Exception as exception:
 
