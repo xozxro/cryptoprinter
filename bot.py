@@ -210,6 +210,7 @@ class tradebot():
         self.url = data.discordwebhook
         self.watching = False
         self.openQT = 0
+        self.gains = []
 
         if data.devMode:
             self.accountBalance = 10392.36
@@ -359,6 +360,10 @@ class tradebot():
 
                     if type == 'sell':
 
+                        self.gains.append(round((self.openGain / self.buyVal) * 100, 2))
+
+                        self.avgGain = sum(self.gains) / len(self.gains)
+
                         self.embed.add_embed_field(name='Bought Price', value='$' + str(round(self.buyPrice, 2)))
                         self.embed.add_embed_field(name='Bought Value', value='$' + str(self.buyVal))
                         if soldVal > buyVal:
@@ -395,6 +400,16 @@ class tradebot():
                             self.gainText = '**$0**'
 
                         self.embed.add_embed_field(name='Day Gain', value=self.gainText)
+
+                        if self.avgGain < 0:
+                            self.avgGainText = '-' + str(abs(self.avgGain)) + '%'
+                        else:
+                            self.avgGainText = '+' + str(abs(self.avgGain)) + '%'
+
+                        self.embed.add_embed_field(name='Avg % Gain', value=self.avgGainText)
+
+
+
 
                 else:
 

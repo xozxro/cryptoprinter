@@ -22,9 +22,8 @@ import traceback
 
 
 
+
 def makeTrade(tradearray,trends,type):
-
-
 
     success = False
 
@@ -192,7 +191,6 @@ histogram = 'NULL'
 RSI = 'NULL'
 opentime = False
 exitNeeded = False
-
 
 # set up previous data and trend memory
 previous = {'VWAP': [], 'close': [], 'MACD': [], 'RSI': [], 'STOCH': [], 'ema12': [], 'stockOpen': []}
