@@ -406,6 +406,8 @@ class tradebot():
                         else:
                             self.avgGainText = '+' + str(abs(self.avgGain)) + '%'
 
+                        self.embed.add_embed_field(name='Trades Taken', value=str(len(self.gains)))
+
                         self.embed.add_embed_field(name='Avg % Gain', value=self.avgGainText)
 
 
