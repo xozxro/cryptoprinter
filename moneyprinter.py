@@ -70,10 +70,10 @@ def makeTrade(tradearray,trends,type):
                 gain = bot.accountBalance - bot.startingBal
 
                 if gain < 0:
-                    gainText = '**-$' + str(gain) + '**'
+                    gainText = '**-$' + str(round(gain,2)) + '**'
 
                 if gain > 0:
-                    gainText = '**+$' + str(gain) + '**'
+                    gainText = '**+$' + str(round(gain,2)) + '**'
 
                 else:
                     gainText = '**$0**'
@@ -103,9 +103,6 @@ def makeTrade(tradearray,trends,type):
         strong = True
     else:
         strong = False
-
-
-
 
 
     return success
@@ -657,6 +654,7 @@ while True:
 
                     if loopNum == 5:
                         bot.updateMessage()
+                        loopNum = 0
 
                     # KEEP TRACK OF PREVIOUS DATA - THIS is used if trade is FALSE due to an exit.
                     previous['VWAP'].append(VWAP)

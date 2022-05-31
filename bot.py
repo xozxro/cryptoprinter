@@ -212,7 +212,7 @@ class tradebot():
         self.openQT = 0
 
         if data.devMode:
-            self.accountBalance = 10369.19
+            self.accountBalance = 10392.36
         else:
             self.accountBalance = self.client.get_total_usd_balance()
 
@@ -249,6 +249,8 @@ class tradebot():
             else:
                 print('[TRADEBOT] placing SELL order at ' + str(self.priceNum))
                 self.accountBalance = self.cash + (self.priceNum*self.openQT)
+                self.soldVal = self.cash + (self.priceNum*self.openQT)
+                self.soldQT = self.openQT
                 self.cash = self.accountBalance
                 self.openQT = 0
                 self.logData()
@@ -276,6 +278,8 @@ class tradebot():
 
     def updateMessage(self):
 
+        self.logData()
+
         self.webhook = DiscordWebhook(url=self.url, username='Nyria', content='')
         self.embed = DiscordEmbed(title='[STATUS UPDATE]', description='', color='4200FF')
         self.embed.add_embed_field(name='Time', value=str(time.strftime("%H:%M")))
@@ -299,16 +303,19 @@ class tradebot():
 
         if self.dayGain < 0:
             gainPerc = '-' + str(round((self.dayGain / self.startingBal) * 100, 2)) + '%'
-            self.gainText = '**-$' + str(self.dayGain) + '**' + ' (' + gainPerc + ')'
+            self.gainText = '**-$' + str(round(self.dayGain,2)) + '**' + ' (' + gainPerc + ')'
 
         if self.dayGain > 0:
             gainPerc = '+' + str(round((self.dayGain / self.startingBal) * 100, 2)) + '%'
-            self.gainText = '**+$' + str(self.dayGain) + '**' + ' (' + gainPerc + ')'
+            self.gainText = '**+$' + str(round(self.dayGain,2)) + '**' + ' (' + gainPerc + ')'
 
         else:
             self.gainText = '**$0**'
 
         self.embed.add_embed_field(name='Day Gain', value=self.gainText)
+
+        self.webhook.add_embed(self.embed)
+        response = self.webhook.execute()
 
 
     def pushDiscordNotif(self, url, type=''):
@@ -344,8 +351,9 @@ class tradebot():
                 if type != 'start_msg':
 
                     self.embed.add_embed_field(name='Price', value='**$' + str(round(self.priceNum,2)) + '**')
-                    self.embed.add_embed_field(name='QT', value='**x ' + str(self.openQT) + '**')
-                    self.embed.add_embed_field(name='Value', value='**$' + str(self.openVal) + '**')
+                    if type != 'sell': self.embed.add_embed_field(name='QT', value='**x ' + str(self.openQT) + '**')
+                    else: self.embed.add_embed_field(name='QT', value='**x ' + str(self.soldQT) + '**')
+
 
                     if type == 'buy': self.embed.add_embed_field(name='Value', value='**$' + str(self.openVal) + '**')
 
@@ -353,17 +361,22 @@ class tradebot():
 
                         self.embed.add_embed_field(name='Bought Price', value='$' + str(round(self.buyPrice, 2)))
                         self.embed.add_embed_field(name='Bought Value', value='$' + str(self.buyVal))
-                        self.embed.add_embed_field(name='Sold Value', value='**$' + str(self.openVal) + '**')
+                        if soldVal > buyVal:
+                            soldValText = '**$' + str(round(self.soldVal,2)) + '** + $' + str(round(self.soldVal-self.buyVal)) + ' (+' + str(round(((self.soldVal-self.buyVal)*buyVal)*100)) + '%)'
+                        else:
+                            soldValText = '**$' + str(round(self.soldVal,2)) + ' - $' + str(round(self.buyVal-self.soldVal)) + ' (-' + str(round(((self.buyVal-self.soldVal)*buyVal)*100)) + '%)'
+
+                        self.embed.add_embed_field(name='Sold Value', value=soldValText)
 
                         self.embed.add_embed_field(name='New Balance', value='**$' + str(round(self.accountBalance,2)) + '**')
 
                         if self.openGain < 0:
                             gainPerc = '-' + str(round((self.openGain / self.buyVal) * 100,2)) + '%'
-                            self.gainText = '**-$' + str(self.openGain) + '**' + ' (' + gainPerc + ')'
+                            self.gainText = '**-$' + str(round(self.openGain,2)) + '**' + ' (' + gainPerc + ')'
 
                         if self.openGain > 0:
                             gainPerc = '+' + str(round((self.openGain / self.buyVal) * 100,2)) + '%'
-                            self.gainText = '**+$' + str(self.openGain) + '**' + ' (' + gainPerc + ')'
+                            self.gainText = '**+$' + str(round(self.openGain,2)) + '**' + ' (' + gainPerc + ')'
 
                         else:
                             self.gainText = '**$0**'
@@ -372,11 +385,11 @@ class tradebot():
 
                         if self.dayGain < 0:
                             gainPerc = '-' + str(round((self.dayGain / self.startingBal) * 100,2)) + '%'
-                            self.gainText = '**-$' + str(self.dayGain) + '**' + ' (' + gainPerc + ')'
+                            self.gainText = '**-$' + str(round(self.dayGain,2)) + '**' + ' (' + gainPerc + ')'
 
                         if self.dayGain > 0:
                             gainPerc = '+' + str(round((self.dayGain / self.startingBal) * 100, 2)) + '%'
-                            self.gainText = '**+$' + str(self.dayGain) + '**' + ' (' + gainPerc + ')'
+                            self.gainText = '**+$' + str(round(self.dayGain,2)) + '**' + ' (' + gainPerc + ')'
 
                         else:
                             self.gainText = '**$0**'
