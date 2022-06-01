@@ -341,35 +341,36 @@ while True:
 
     last_secs = current_secs
 
-
     # PRINT MESSAGE TO CONSOLE
+    print()
+    print()
+    print('###############################')
     print()
     print('[TRADEBOT]           [' + str(current_time) + ']')
     print('[TRADEBOT]     PRICE | $' + str(round(avgprice,2)))
 
     if data.devMode:
 
-        print('[TRADEBOT]   1m MACD | ' + str(MACD))
-
         if MACDdowntrend:
-            print('[TRADEBOT]           | DOWNTREND')
-
-        print('[TRADEBOT]    1m RSI | ' + str(RSI))
+            print('[TRADEBOT]   1m MACD | ' + str(round(MACD, 5)) + ' | DOWNTREND')
+        else:
+            print('[TRADEBOT]   1m MACD | ' + str(round(MACD, 5)))
 
         if RSIdowntrend:
-            print('[TRADEBOT]          | DOWNTREND')
-
-        print('[TRADEBOT]  1m 8 EMA | ' + str(ema5))
-        print('[TRADEBOT]  1m 9 EMA | ' + str(ema12))
-        print('[TRADEBOT] 1m 21 EMA | ' + str(ema26))
-
-        print('[TRADEBOT]   5m MACD | ' + str(MACD5m))
-
-        print('[TRADEBOT]    5m RSI | ' + str(RSI5m))
-
-        print('[TRADEBOT]  5m 8 EMA | ' + str(ema5))
-        print('[TRADEBOT]  5m 9 EMA | ' + str(ema12))
-        print('[TRADEBOT] 5m 21 EMA | ' + str(ema26))
+            print('[TRADEBOT]    1m RSI | ' + str(round(RSI, 5)) + ' | DOWNTREND')
+        else:
+            print('[TRADEBOT]    1m RSI | ' + str(round(RSI, 5)))
+        print('[TRADEBOT]  1m 8 EMA | ' + str(round(ema5,5)))
+        print('[TRADEBOT]  1m 9 EMA | ' + str(round(ema12,5)))
+        print('[TRADEBOT] 1m 21 EMA | ' + str(round(ema26,5)))
+        print()
+        print('[TRADEBOT]   5m MACD | ' + str(round(MACD5m,5)))
+        print('[TRADEBOT]    5m RSI | ' + str(round(RSI5m,5)))
+        print('[TRADEBOT]  5m 8 EMA | ' + str(round(ema55m,5)))
+        print('[TRADEBOT]  5m 9 EMA | ' + str(round(ema125m,5)))
+        print('[TRADEBOT] 5m 21 EMA | ' + str(round(ema265m,5)))
+        print()
+        print('###############################')
 
     # TEST FOR OVERSOLD DIP IN ASSET PRICE
     try:
@@ -554,34 +555,38 @@ while True:
                         lowestMACD = float(MACD)
 
                     print()
-                    print('[TRADEBOT]          [' + str(current_time) + ']' )
-                    print('[TRADEBOT]    PRICE | $' + str(round(avgprice, 2)))
-                    print('[TRADEBOT]   STATUS | watching for a trade.. ')
+                    print()
+                    print('###############################')
+                    print()
+                    print('[TRADEBOT]           [' + str(current_time) + ']' )
+                    print('[TRADEBOT]     PRICE | $' + str(round(avgprice, 2)))
+                    print('[TRADEBOT]    STATUS | watching for a trade.. ')
                     if data.devMode:
 
-                        print('[TRADEBOT]   1m MACD | ' + str(MACD))
-
                         if MACDdowntrend:
-                            print('[TRADEBOT]           | DOWNTREND')
-
-                        print('[TRADEBOT]    1m RSI | ' + str(RSI))
+                            print('[TRADEBOT]   1m MACD | ' + str(round(MACD, 5)) + ' | DOWNTREND')
+                        else:
+                            print('[TRADEBOT]   1m MACD | ' + str(round(MACD, 5)))
 
                         if RSIdowntrend:
-                            print('[TRADEBOT]          | DOWNTREND')
+                            print('[TRADEBOT]    1m RSI | ' + str(round(RSI, 5)) + ' | DOWNTREND')
+                        else:
+                            print('[TRADEBOT]    1m RSI | ' + str(round(RSI, 5)))
+                        print('[TRADEBOT]  1m 8 EMA | ' + str(round(ema5, 5)))
+                        print('[TRADEBOT]  1m 9 EMA | ' + str(round(ema12, 5)))
+                        print('[TRADEBOT] 1m 21 EMA | ' + str(round(ema26, 5)))
+                        print()
+                        print('[TRADEBOT]   5m MACD | ' + str(round(MACD5m, 5)))
+                        print('[TRADEBOT]    5m RSI | ' + str(round(RSI5m, 5)))
+                        print('[TRADEBOT]  5m 8 EMA | ' + str(round(ema55m, 5)))
+                        print('[TRADEBOT]  5m 9 EMA | ' + str(round(ema125m, 5)))
+                        print('[TRADEBOT] 5m 21 EMA | ' + str(round(ema265m, 5)))
+                        print()
+                        print('[TRADEBOT]  MACD low | ' + str(round(lowestMACD,5)))
+                        print('[TRADEBOT]   RSI low | ' + str(round(lowestRSI,5)))
+                        print()
+                        print('###############################')
 
-                            print('[TRADEBOT]  1m 8 EMA | ' + str(ema5))
-                            print('[TRADEBOT]  1m 9 EMA | ' + str(ema12))
-                            print('[TRADEBOT] 1m 21 EMA | ' + str(ema26))
-
-                        print('[TRADEBOT]   5m MACD | ' + str(MACD5m))
-
-                        print('[TRADEBOT]    5m RSI | ' + str(RSI5m))
-
-                        print('[TRADEBOT]  5m 8 EMA | ' + str(ema5))
-                        print('[TRADEBOT]  5m 9 EMA | ' + str(ema12))
-                        print('[TRADEBOT] 5m 21 EMA | ' + str(ema26))
-                        print('[TRADEBOT]  MACD low | ' + str(lowestMACD))
-                        print('[TRADEBOT]   RSI low | ' + str(lowestRSI))
 
                     # COMPARE TO LAST MIN
                     currentTrends = [priceDowntrend, MACDdowntrend, RSIdowntrend, LowerFromVWAP, STOCHdowntrend,
@@ -794,36 +799,40 @@ while True:
                     volumes = dataDict['volumes']
 
                     print()
-                    print('[TRADEBOT]          [' + str(current_time) + ']')
-                    print('[TRADEBOT]    PRICE | $' + str(round(avgprice, 2)))
-                    print('[TRADEBOT]  OPEN QT | x' + str(bot.openQT))
-                    print('[TRADEBOT] OPEN VAL | $' + str(float(bot.openQT * round(avgprice, 2))))
+                    print()
+                    print('###############################')
+                    print()
+                    print('[TRADEBOT]           [' + str(current_time) + ']')
+                    print('[TRADEBOT]     PRICE | $' + str(round(avgprice, 2)))
+                    print('[TRADEBOT]   OPEN QT | x' + str(bot.openQT))
+                    print('[TRADEBOT]  OPEN VAL | $' + str(float(bot.openQT * round(avgprice, 2))))
 
                     if data.devMode:
 
-                        print('[TRADEBOT]   1m MACD | ' + str(MACD))
-
                         if MACDdowntrend:
-                            print('[TRADEBOT]           | DOWNTREND')
-
-                        print('[TRADEBOT]    1m RSI | ' + str(RSI))
+                            print('[TRADEBOT]   1m MACD | ' + str(round(MACD, 5)) + ' | DOWNTREND')
+                        else:
+                            print('[TRADEBOT]   1m MACD | ' + str(round(MACD, 5)))
 
                         if RSIdowntrend:
-                            print('[TRADEBOT]          | DOWNTREND')
+                            print('[TRADEBOT]    1m RSI | ' + str(round(RSI, 5)) + ' | DOWNTREND')
+                        else:
+                            print('[TRADEBOT]    1m RSI | ' + str(round(RSI, 5)))
 
-                            print('[TRADEBOT]  1m 8 EMA | ' + str(ema5))
-                            print('[TRADEBOT]  1m 9 EMA | ' + str(ema12))
-                            print('[TRADEBOT] 1m 21 EMA | ' + str(ema26))
-
-                        print('[TRADEBOT]   5m MACD | ' + str(MACD5m))
-
-                        print('[TRADEBOT]    5m RSI | ' + str(RSI5m))
-
-                        print('[TRADEBOT]  5m 8 EMA | ' + str(ema5))
-                        print('[TRADEBOT]  5m 9 EMA | ' + str(ema12))
-                        print('[TRADEBOT] 5m 21 EMA | ' + str(ema26))
-                        print('[TRADEBOT]  MACD low | ' + str(lowestMACD))
-                        print('[TRADEBOT]   RSI low | ' + str(lowestRSI))
+                        print('[TRADEBOT]  1m 8 EMA | ' + str(round(ema5, 5)))
+                        print('[TRADEBOT]  1m 9 EMA | ' + str(round(ema12, 5)))
+                        print('[TRADEBOT] 1m 21 EMA | ' + str(round(ema26, 5)))
+                        print()
+                        print('[TRADEBOT]   5m MACD | ' + str(round(MACD5m, 5)))
+                        print('[TRADEBOT]    5m RSI | ' + str(round(RSI5m, 5)))
+                        print('[TRADEBOT]  5m 8 EMA | ' + str(round(ema55m, 5)))
+                        print('[TRADEBOT]  5m 9 EMA | ' + str(round(ema125m, 5)))
+                        print('[TRADEBOT] 5m 21 EMA | ' + str(round(ema265m, 5)))
+                        print()
+                        print('[TRADEBOT]  MACD low | ' + str(round(lowestMACD, 5)))
+                        print('[TRADEBOT]   RSI low | ' + str(round(lowestRSI, 5)))
+                        print()
+                        print('###############################')
 
                     # KEEP TRACK OF AVG INDICATOR DIRECTIONS
                     trueCnt = 0
