@@ -334,7 +334,7 @@ while True:
     # UPDATE TIME
     now = datetime.now()
     lastminute = now.strftime("%M")
-    current_time = now.strftime("%H:%M:%S")
+    current_time = now.strftime("%H:%M")
     current_secs = now.strftime("%S")
     if str(current_secs) == str(last_secs):
         time.sleep(1)
@@ -721,7 +721,7 @@ while True:
                     # KEEP TRACK OF TIME
                     now = datetime.now()
                     minute = now.strftime("%M")
-                    current_time = now.strftime("%H:%M:%S")
+                    current_time = now.strftime("%H:%M")
 
                     # wait for next minute
                     while minute == lastminute:
@@ -767,7 +767,7 @@ while True:
 
                     # KEEP TRACK OF TIME
                     now = datetime.now()
-                    current_time = now.strftime("%H:%M:%S")
+                    current_time = now.strftime("%H:%M")
 
 
                     # SAVE TRADEARRAY WITH NEW DATA INCASE OF EXIT
