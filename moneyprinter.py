@@ -191,6 +191,9 @@ histogram = 'NULL'
 RSI = 'NULL'
 opentime = False
 exitNeeded = False
+last_secs = '0'
+MACDdowntrend = False
+RSIdowntrend = False
 
 # set up previous data and trend memory
 previous = {'VWAP': [], 'close': [], 'MACD': [], 'RSI': [], 'STOCH': [], 'ema12': [], 'stockOpen': []}
@@ -205,8 +208,6 @@ bot.pushDiscordNotif(data.discordwebhook, type='start_msg')
 
 while True:
 
-
-
     # ADD TO PREVIOUS DATA COLLECTION
     if first:
         pass
@@ -219,8 +220,6 @@ while True:
         previous['ema12'].append(ema12)
         previous['stockOpen'].append(stockOpen)
 
-
-
     # GET MARKET DATA
     dataWorking = False
     while dataWorking == False:
@@ -232,8 +231,6 @@ while True:
         except:
             time.sleep(10)
             pass
-
-
 
     # ASSIGN MARKET DATA
     high = dataDict['high']
@@ -338,13 +335,41 @@ while True:
     now = datetime.now()
     lastminute = now.strftime("%M")
     current_time = now.strftime("%H:%M:%S")
+    current_secs = now.strftime("%S")
+    if str(current_secs) == str(last_secs):
+        time.sleep(1)
+
+    last_secs = current_secs
 
 
     # PRINT MESSAGE TO CONSOLE
     print()
+    print('[TRADEBOT]           [' + str(current_time) + ']')
+    print('[TRADEBOT]     PRICE | $' + str(round(avgprice,2)))
 
-    print('[TRADEBOT]          [' + str(current_time) + ']')
-    print('[TRADEBOT]    PRICE | $' + str(round(avgprice,2)))
+    if data.devMode:
+
+        print('[TRADEBOT]   1m MACD | ' + str(MACD))
+
+        if MACDdowntrend:
+            print('[TRADEBOT]           | DOWNTREND')
+
+        print('[TRADEBOT]    1m RSI | ' + str(RSI))
+
+        if RSIdowntrend:
+            print('[TRADEBOT]          | DOWNTREND')
+
+        print('[TRADEBOT]  1m 8 EMA | ' + str(ema5))
+        print('[TRADEBOT]  1m 9 EMA | ' + str(ema12))
+        print('[TRADEBOT] 1m 21 EMA | ' + str(ema26))
+
+        print('[TRADEBOT]   5m MACD | ' + str(MACD5m))
+
+        print('[TRADEBOT]    5m RSI | ' + str(RSI5m))
+
+        print('[TRADEBOT]  5m 8 EMA | ' + str(ema5))
+        print('[TRADEBOT]  5m 9 EMA | ' + str(ema12))
+        print('[TRADEBOT] 5m 21 EMA | ' + str(ema26))
 
     # TEST FOR OVERSOLD DIP IN ASSET PRICE
     try:
@@ -419,8 +444,12 @@ while True:
                         time.sleep(2)
                         now = datetime.now()
                         minute = now.strftime("%M")
-                    time.sleep(1)
+                        current_secs = now.strftime("%S")
 
+                    if str(current_secs) == str(last_secs):
+                        time.sleep(1)
+
+                    last_secs = current_secs
 
                     # KEEP TRACK OF CURRENT MINUTE
                     lastminute = minute
@@ -485,9 +514,6 @@ while True:
                     avgprice = dataDict['avgprice']
                     volumes = dataDict['volumes']
 
-                    print('[TRADEBOT]          [' + str(current_time) + ']')
-                    print('[TRADEBOT]    PRICE | $' + str(round(avgprice, 2)))
-
                     high5m = dataDict5m['high']
                     stockOpen5m = dataDict5m['stockOpen']
                     low5m = dataDict5m['low']
@@ -527,6 +553,35 @@ while True:
                     if float(MACD) < float(lowestMACD):
                         lowestMACD = float(MACD)
 
+                    print()
+                    print('[TRADEBOT]          [' + str(current_time) + ']' )
+                    print('[TRADEBOT]    PRICE | $' + str(round(avgprice, 2)))
+                    print('[TRADEBOT]   STATUS | watching for a trade.. ')
+                    if data.devMode:
+
+                        print('[TRADEBOT]   1m MACD | ' + str(MACD))
+
+                        if MACDdowntrend:
+                            print('[TRADEBOT]           | DOWNTREND')
+
+                        print('[TRADEBOT]    1m RSI | ' + str(RSI))
+
+                        if RSIdowntrend:
+                            print('[TRADEBOT]          | DOWNTREND')
+
+                            print('[TRADEBOT]  1m 8 EMA | ' + str(ema5))
+                            print('[TRADEBOT]  1m 9 EMA | ' + str(ema12))
+                            print('[TRADEBOT] 1m 21 EMA | ' + str(ema26))
+
+                        print('[TRADEBOT]   5m MACD | ' + str(MACD5m))
+
+                        print('[TRADEBOT]    5m RSI | ' + str(RSI5m))
+
+                        print('[TRADEBOT]  5m 8 EMA | ' + str(ema5))
+                        print('[TRADEBOT]  5m 9 EMA | ' + str(ema12))
+                        print('[TRADEBOT] 5m 21 EMA | ' + str(ema26))
+                        print('[TRADEBOT]  MACD low | ' + str(lowestMACD))
+                        print('[TRADEBOT]   RSI low | ' + str(lowestRSI))
 
                     # COMPARE TO LAST MIN
                     currentTrends = [priceDowntrend, MACDdowntrend, RSIdowntrend, LowerFromVWAP, STOCHdowntrend,
@@ -668,11 +723,17 @@ while True:
                     minute = now.strftime("%M")
                     current_time = now.strftime("%H:%M:%S")
 
+                    # wait for next minute
                     while minute == lastminute:
                         time.sleep(2)
                         now = datetime.now()
                         minute = now.strftime("%M")
-                    time.sleep(1)
+                        current_secs = now.strftime("%S")
+
+                    if str(current_secs) == str(last_secs):
+                        time.sleep(1)
+
+                    last_secs = current_secs
 
                     lastminute = minute
 
@@ -732,10 +793,37 @@ while True:
                     avgprice = dataDict['avgprice']
                     volumes = dataDict['volumes']
 
+                    print()
                     print('[TRADEBOT]          [' + str(current_time) + ']')
                     print('[TRADEBOT]    PRICE | $' + str(round(avgprice, 2)))
                     print('[TRADEBOT]  OPEN QT | x' + str(bot.openQT))
                     print('[TRADEBOT] OPEN VAL | $' + str(float(bot.openQT * round(avgprice, 2))))
+
+                    if data.devMode:
+
+                        print('[TRADEBOT]   1m MACD | ' + str(MACD))
+
+                        if MACDdowntrend:
+                            print('[TRADEBOT]           | DOWNTREND')
+
+                        print('[TRADEBOT]    1m RSI | ' + str(RSI))
+
+                        if RSIdowntrend:
+                            print('[TRADEBOT]          | DOWNTREND')
+
+                            print('[TRADEBOT]  1m 8 EMA | ' + str(ema5))
+                            print('[TRADEBOT]  1m 9 EMA | ' + str(ema12))
+                            print('[TRADEBOT] 1m 21 EMA | ' + str(ema26))
+
+                        print('[TRADEBOT]   5m MACD | ' + str(MACD5m))
+
+                        print('[TRADEBOT]    5m RSI | ' + str(RSI5m))
+
+                        print('[TRADEBOT]  5m 8 EMA | ' + str(ema5))
+                        print('[TRADEBOT]  5m 9 EMA | ' + str(ema12))
+                        print('[TRADEBOT] 5m 21 EMA | ' + str(ema26))
+                        print('[TRADEBOT]  MACD low | ' + str(lowestMACD))
+                        print('[TRADEBOT]   RSI low | ' + str(lowestRSI))
 
                     # KEEP TRACK OF AVG INDICATOR DIRECTIONS
                     trueCnt = 0
