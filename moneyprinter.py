@@ -346,29 +346,75 @@ while True:
     print()
     print('###############################')
     print()
-    print('[TRADEBOT]           [' + str(current_time) + ']')
+    print('[TRADEBOT]            [' + str(current_time) + ']')
     print('[TRADEBOT]     PRICE | $' + str(round(avgprice,2)))
 
     if data.devMode:
 
-        if MACDdowntrend:
-            print('[TRADEBOT]   1m MACD | ' + str(round(MACD, 5)) + ' | DOWNTREND')
+        print()
+        if MACDdowntrend or histogram < 0:
+            print('[TRADEBOT] 1m   MACD | ' + str(round(MACD, 3)) + ' | BEARISH')
+        elif MACD > 0 or histogram > 0:
+            print('[TRADEBOT] 1m   MACD | ' + str(round(MACD, 3)) + ' | BULLISH')
         else:
-            print('[TRADEBOT]   1m MACD | ' + str(round(MACD, 5)))
+            print('[TRADEBOT] 1m   MACD | ' + str(round(MACD, 3)) + ' | NUETRAL')
 
         if RSIdowntrend:
-            print('[TRADEBOT]    1m RSI | ' + str(round(RSI, 5)) + ' | DOWNTREND')
+            print('[TRADEBOT] 1m    RSI | ' + str(round(RSI, 3)) + ' | BEARISH')
+        elif RSI > 45:
+            print('[TRADEBOT] 1m    RSI | ' + str(round(RSI, 3)) + ' | BULLISH')
         else:
-            print('[TRADEBOT]    1m RSI | ' + str(round(RSI, 5)))
-        print('[TRADEBOT]  1m 8 EMA | ' + str(round(ema5,5)))
-        print('[TRADEBOT]  1m 9 EMA | ' + str(round(ema12,5)))
-        print('[TRADEBOT] 1m 21 EMA | ' + str(round(ema26,5)))
+            print('[TRADEBOT] 1m    RSI | ' + str(round(RSI, 3)) + ' | NUETRAL')
+
+        if ema5 < close:
+            text = 'BULLISH'
+        else:
+            text = 'BEARISH'
+        print('[TRADEBOT] 1m  8 EMA | ' + str(round(ema5, 3)) + ' | ' + text)
+
+        if ema12 < close:
+            text = 'BULLISH'
+        else:
+            text = 'BEARISH'
+        print('[TRADEBOT] 1m  9 EMA | ' + str(round(ema12, 3)) + ' | ' + text)
+
+        if ema26 < close:
+            text = 'BULLISH'
+        else:
+            text = 'BEARISH'
+        print('[TRADEBOT] 1m 21 EMA | ' + str(round(ema26, 3)) + ' | ' + text)
+
         print()
-        print('[TRADEBOT]   5m MACD | ' + str(round(MACD5m,5)))
-        print('[TRADEBOT]    5m RSI | ' + str(round(RSI5m,5)))
-        print('[TRADEBOT]  5m 8 EMA | ' + str(round(ema55m,5)))
-        print('[TRADEBOT]  5m 9 EMA | ' + str(round(ema125m,5)))
-        print('[TRADEBOT] 5m 21 EMA | ' + str(round(ema265m,5)))
+
+        if MACD5m > 0: print('[TRADEBOT] 5m   MACD | ' + str(round(MACD5m, 3)) + ' | BULLISH')
+        else: print('[TRADEBOT] 5m   MACD | ' + str(round(MACD5m, 3)) + ' | BEARISH')
+
+        if RSI5m > 45:
+            print('[TRADEBOT] 5m    RSI | ' + str(round(RSI5m, 3)) + ' | BULLISH')
+        else:
+            print('[TRADEBOT] 5m    RSI | ' + str(round(RSI5m, 3)) + ' | BEARISH')
+
+        if ema55m < close5m:
+            text = 'BULLISH'
+        else:
+            text = 'BEARISH'
+        print('[TRADEBOT] 5m  8 EMA | ' + str(round(ema55m, 3)) + ' | ' + text)
+
+        if ema125m < close5m:
+            text = 'BULLISH'
+        else:
+            text = 'BEARISH'
+        print('[TRADEBOT] 5m  9 EMA | ' + str(round(ema125m, 3)) + ' | ' + text)
+
+        if ema265m < close5m:
+            text = 'BULLISH'
+        else:
+            text = 'BEARISH'
+        print('[TRADEBOT] 5m 21 EMA | ' + str(round(ema265m, 3)) + ' | ' + text)
+
+        print()
+        print('###############################')
+    else:
         print()
         print('###############################')
 
@@ -558,32 +604,82 @@ while True:
                     print()
                     print('###############################')
                     print()
-                    print('[TRADEBOT]           [' + str(current_time) + ']' )
+                    print('[TRADEBOT]            [' + str(current_time) + ']' )
                     print('[TRADEBOT]     PRICE | $' + str(round(avgprice, 2)))
                     print('[TRADEBOT]    STATUS | watching for a trade.. ')
                     if data.devMode:
-
-                        if MACDdowntrend:
-                            print('[TRADEBOT]   1m MACD | ' + str(round(MACD, 5)) + ' | DOWNTREND')
+                        print()
+                        if MACDdowntrend or histogram < 0:
+                            print('[TRADEBOT] 1m   MACD | ' + str(round(MACD, 3)) + ' | BEARISH')
+                        elif MACD > 0 or histogram > 0:
+                            print('[TRADEBOT] 1m   MACD | ' + str(round(MACD, 3)) + ' | BULLISH')
                         else:
-                            print('[TRADEBOT]   1m MACD | ' + str(round(MACD, 5)))
+                            print('[TRADEBOT] 1m   MACD | ' + str(round(MACD, 3)) + ' | NUETRAL')
 
                         if RSIdowntrend:
-                            print('[TRADEBOT]    1m RSI | ' + str(round(RSI, 5)) + ' | DOWNTREND')
+                            print('[TRADEBOT] 1m    RSI | ' + str(round(RSI, 3)) + ' | BEARISH')
+                        elif RSI > 45:
+                            print('[TRADEBOT] 1m    RSI | ' + str(round(RSI, 3)) + ' | BULLISH')
                         else:
-                            print('[TRADEBOT]    1m RSI | ' + str(round(RSI, 5)))
-                        print('[TRADEBOT]  1m 8 EMA | ' + str(round(ema5, 5)))
-                        print('[TRADEBOT]  1m 9 EMA | ' + str(round(ema12, 5)))
-                        print('[TRADEBOT] 1m 21 EMA | ' + str(round(ema26, 5)))
+                            print('[TRADEBOT] 1m    RSI | ' + str(round(RSI, 3)) + ' | NUETRAL')
+
+                        if ema5 < close:
+                            text = 'BULLISH'
+                        else:
+                            text = 'BEARISH'
+                        print('[TRADEBOT] 1m  8 EMA | ' + str(round(ema5, 3)) + ' | ' + text)
+
+                        if ema12 < close:
+                            text = 'BULLISH'
+                        else:
+                            text = 'BEARISH'
+                        print('[TRADEBOT] 1m  9 EMA | ' + str(round(ema12, 3)) + ' | ' + text)
+
+                        if ema26 < close:
+                            text = 'BULLISH'
+                        else:
+                            text = 'BEARISH'
+                        print('[TRADEBOT] 1m 21 EMA | ' + str(round(ema26, 3)) + ' | ' + text)
+
                         print()
-                        print('[TRADEBOT]   5m MACD | ' + str(round(MACD5m, 5)))
-                        print('[TRADEBOT]    5m RSI | ' + str(round(RSI5m, 5)))
-                        print('[TRADEBOT]  5m 8 EMA | ' + str(round(ema55m, 5)))
-                        print('[TRADEBOT]  5m 9 EMA | ' + str(round(ema125m, 5)))
-                        print('[TRADEBOT] 5m 21 EMA | ' + str(round(ema265m, 5)))
+
+                        if MACD5m > 0:
+                            print('[TRADEBOT] 5m   MACD | ' + str(round(MACD5m, 3)) + ' | BULLISH')
+                        else:
+                            print('[TRADEBOT] 5m   MACD | ' + str(round(MACD5m, 3)) + ' | BEARISH')
+
+                        if RSI5m > 45:
+                            print('[TRADEBOT] 5m    RSI | ' + str(round(RSI5m, 3)) + ' | BULLISH')
+                        else:
+                            print('[TRADEBOT] 5m    RSI | ' + str(round(RSI5m, 3)) + ' | BEARISH')
+
+                        if ema55m < close5m:
+                            text = 'BULLISH'
+                        else:
+                            text = 'BEARISH'
+                        print('[TRADEBOT] 5m  8 EMA | ' + str(round(ema55m, 3)) + ' | ' + text)
+
+                        if ema125m < close5m:
+                            text = 'BULLISH'
+                        else:
+                            text = 'BEARISH'
+                        print('[TRADEBOT] 5m  9 EMA | ' + str(round(ema125m, 3)) + ' | ' + text)
+
+                        if ema265m < close5m:
+                            text = 'BULLISH'
+                        else:
+                            text = 'BEARISH'
+                        print('[TRADEBOT] 5m 21 EMA | ' + str(round(ema265m, 3)) + ' | ' + text)
+
+                        try:
+                            print()
+                            print('[TRADEBOT]  MACD low | ' + str(round(lowestMACD, 3)))
+                            print('[TRADEBOT]   RSI low | ' + str(round(lowestRSI, 3)))
+                        except:
+                            pass
                         print()
-                        print('[TRADEBOT]  MACD low | ' + str(round(lowestMACD,5)))
-                        print('[TRADEBOT]   RSI low | ' + str(round(lowestRSI,5)))
+                        print('###############################')
+                    else:
                         print()
                         print('###############################')
 
@@ -802,35 +898,84 @@ while True:
                     print()
                     print('###############################')
                     print()
-                    print('[TRADEBOT]           [' + str(current_time) + ']')
+                    print('[TRADEBOT]            [' + str(current_time) + ']')
                     print('[TRADEBOT]     PRICE | $' + str(round(avgprice, 2)))
                     print('[TRADEBOT]   OPEN QT | x' + str(bot.openQT))
                     print('[TRADEBOT]  OPEN VAL | $' + str(float(bot.openQT * round(avgprice, 2))))
 
                     if data.devMode:
-
-                        if MACDdowntrend:
-                            print('[TRADEBOT]   1m MACD | ' + str(round(MACD, 5)) + ' | DOWNTREND')
+                        print()
+                        if MACDdowntrend or histogram < 0:
+                            print('[TRADEBOT] 1m   MACD | ' + str(round(MACD, 2)) + '  | BEARISH')
+                        elif MACD > 0 or histogram > 0:
+                            print('[TRADEBOT] 1m   MACD | ' + str(round(MACD, 2)) + '  | BULLISH')
                         else:
-                            print('[TRADEBOT]   1m MACD | ' + str(round(MACD, 5)))
+                            print('[TRADEBOT] 1m   MACD | ' + str(round(MACD, 2)) + '  | NUETRAL')
 
                         if RSIdowntrend:
-                            print('[TRADEBOT]    1m RSI | ' + str(round(RSI, 5)) + ' | DOWNTREND')
+                            print('[TRADEBOT] 1m    RSI | ' + str(round(RSI, 3)) + ' | BEARISH')
+                        elif RSI > 45:
+                            print('[TRADEBOT] 1m    RSI | ' + str(round(RSI, 3)) + ' | BULLISH')
                         else:
-                            print('[TRADEBOT]    1m RSI | ' + str(round(RSI, 5)))
+                            print('[TRADEBOT] 1m    RSI | ' + str(round(RSI, 3)) + ' | NUETRAL')
 
-                        print('[TRADEBOT]  1m 8 EMA | ' + str(round(ema5, 5)))
-                        print('[TRADEBOT]  1m 9 EMA | ' + str(round(ema12, 5)))
-                        print('[TRADEBOT] 1m 21 EMA | ' + str(round(ema26, 5)))
+                        if ema5 < close:
+                            text = 'BULLISH'
+                        else:
+                            text = 'BEARISH'
+                        print('[TRADEBOT] 1m  8 EMA | ' + str(round(ema5, 3)) + ' | ' + text)
+
+                        if ema12 < close:
+                            text = 'BULLISH'
+                        else:
+                            text = 'BEARISH'
+                        print('[TRADEBOT] 1m  9 EMA | ' + str(round(ema12, 3)) + ' | ' + text)
+
+                        if ema26 < close:
+                            text = 'BULLISH'
+                        else:
+                            text = 'BEARISH'
+                        print('[TRADEBOT] 1m 21 EMA | ' + str(round(ema26, 3)) + ' | ' + text)
+
                         print()
-                        print('[TRADEBOT]   5m MACD | ' + str(round(MACD5m, 5)))
-                        print('[TRADEBOT]    5m RSI | ' + str(round(RSI5m, 5)))
-                        print('[TRADEBOT]  5m 8 EMA | ' + str(round(ema55m, 5)))
-                        print('[TRADEBOT]  5m 9 EMA | ' + str(round(ema125m, 5)))
-                        print('[TRADEBOT] 5m 21 EMA | ' + str(round(ema265m, 5)))
+
+                        if MACD5m > 0:
+                            print('[TRADEBOT] 5m   MACD | ' + str(round(MACD5m, 2)) + '  | BULLISH')
+                        else:
+                            print('[TRADEBOT] 5m   MACD | ' + str(round(MACD5m, 2)) + '  | BEARISH')
+
+                        if RSI5m > 45:
+                            print('[TRADEBOT] 5m    RSI | ' + str(round(RSI5m, 3)) + ' | BULLISH')
+                        else:
+                            print('[TRADEBOT] 5m    RSI | ' + str(round(RSI5m, 3)) + ' | BEARISH')
+
+                        if ema55m < close5m:
+                            text = 'BULLISH'
+                        else:
+                            text = 'BEARISH'
+                        print('[TRADEBOT] 5m  8 EMA | ' + str(round(ema55m, 3)) + ' | ' + text)
+
+                        if ema125m < close5m:
+                            text = 'BULLISH'
+                        else:
+                            text = 'BEARISH'
+                        print('[TRADEBOT] 5m  9 EMA | ' + str(round(ema125m, 3)) + ' | ' + text)
+
+                        if ema265m < close5m:
+                            text = 'BULLISH'
+                        else:
+                            text = 'BEARISH'
+                        print('[TRADEBOT] 5m 21 EMA | ' + str(round(ema265m, 3)) + ' | ' + text)
+
+                        try:
+                            print()
+                            print('[TRADEBOT]  MACD low | ' + str(round(lowestMACD, 3)))
+                            print('[TRADEBOT]   RSI low | ' + str(round(lowestRSI, 3)))
+                        except:
+                            pass
                         print()
-                        print('[TRADEBOT]  MACD low | ' + str(round(lowestMACD, 5)))
-                        print('[TRADEBOT]   RSI low | ' + str(round(lowestRSI, 5)))
+                        print('###############################')
+                    else:
                         print()
                         print('###############################')
 
