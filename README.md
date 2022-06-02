@@ -3,6 +3,7 @@
 ## _The Last Project You'll Ever Need._
 
 ----------------
+[<img src="[https://img.shields.io/twitter/follow/NyriaStocks?style=for-the-badge]">](https://twitter.com/xozxro)
 
 ![Twitter Follow](https://img.shields.io/twitter/follow/NyriaStocks?style=for-the-badge)(https://twitter.com/xozxro)
 ![Discord](https://img.shields.io/discord/836723167690883103?style=for-the-badge)(https://discord.gg/QJQqRUHk)
