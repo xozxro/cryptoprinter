@@ -27,6 +27,7 @@
 - Consistent trades being made targeting .2% - .7% per trade
 - Alerts and updates on all trades sent to Discord channel
 
+![example](https://raw.githubusercontent.com/xozxro/cryptoprinter/main/example.png)
 
 The bot is derived from the algorithms which empower Nyria's dip - buying alert bots.
 It's been made open source to strive for transparent and effecient community development,
