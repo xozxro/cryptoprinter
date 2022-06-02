@@ -24,8 +24,6 @@ import yfinance as yf
 def getMarketData(avgprices, volumes, interval='1m'):
 
 
-
-
     # download data from yh finance
     running = True
     while running:
@@ -103,7 +101,6 @@ def getMarketData(avgprices, volumes, interval='1m'):
 
 
 
-
     ####################################
     ############## calculate strength indexes
 
@@ -133,13 +130,11 @@ def getMarketData(avgprices, volumes, interval='1m'):
 
 
 
-
     ####################################
     ############## calculate EMAs
     ema12 = data['Close'].ewm(span=9, adjust=False).mean()
     ema26 = data['Close'].ewm(span=21, adjust=False).mean()
     ema5 = data['Close'].ewm(span=8, adjust=False).mean()
-
 
 
 
@@ -158,14 +153,12 @@ def getMarketData(avgprices, volumes, interval='1m'):
 
 
 
-
     currentema12 = ema12[-1]
     currentema26 = ema26[-1]
     currentema5 = ema5[-1]
 
     currentmacd = macd[-1]
     currenthisto = macd_h[-1]
-
 
 
 
@@ -212,7 +205,7 @@ class tradebot():
         self.gains = []
 
         if data.devMode:
-            self.accountBalance = 10431.85
+            self.accountBalance = 10646.83
         else:
             self.accountBalance = self.client.get_total_usd_balance()
 
@@ -374,18 +367,22 @@ class tradebot():
 
                         self.embed.add_embed_field(name='QT', value='x ' + str(self.soldQT))
 
-
-                        if self.openGain < 0: self.gains.append(-(round((abs(self.openGain) * self.buyVal) / 100, 2)))
-                        else: self.gains.append(round((abs(self.openGain) * self.buyVal) / 100, 2))
+                        self.openGain = self.soldVal - self.buyVal
+                        if self.openGain < 0: self.gains.append(-(round((abs(self.openGain) / self.buyVal) * 100, 2)))
+                        else: self.gains.append(round((abs(self.openGain) / self.buyVal) * 100, 2))
                         self.avgGain = round(sum(self.gains) / len(self.gains),2)
+                        # for debug purposes o
+                        print(self.openGain)
+                        print(self.avgGain)
+                        print(self.gains)
 
                         self.embed.add_embed_field(name='Bought Price', value='$' + str(round(self.buyPrice, 2)))
                         self.embed.add_embed_field(name='Bought Value', value='$' + str(round(self.buyVal,2)))
 
                         if self.soldVal > self.buyVal:
-                            self.soldValText = '**$' + str(round(self.soldVal,2)) + '** +$' + str(round(self.soldVal-self.buyVal)) + ' (+' + str(round(((self.soldVal-self.buyVal)/self.buyVal)*100)) + '%)'
+                            self.soldValText = '**$' + str(round(self.soldVal,2)) + '** +$' + str(round(self.soldVal-self.buyVal,2)) + ' (+' + str(round(((self.soldVal-self.buyVal)/self.buyVal)*100,2)) + '%)'
                         else:
-                            self.soldValText = '**$' + str(round(self.soldVal,2)) + '** -$' + str(round(self.buyVal-self.soldVal)) + ' (-' + str(round(((self.buyVal-self.soldVal)/self.buyVal)*100)) + '%)'
+                            self.soldValText = '**$' + str(round(self.soldVal,2)) + '** -$' + str(round(self.buyVal-self.soldVal,2)) + ' (-' + str(round(((self.buyVal-self.soldVal)/self.buyVal)*100,2)) + '%)'
 
                         self.embed.add_embed_field(name='Sold Value', value=self.soldValText)
 
@@ -398,8 +395,11 @@ class tradebot():
                         if self.openGain > 0:
                             self.gainPerc = '+' + str(round((self.openGain / self.buyVal) * 100,2)) + '%'
                             self.gainText = '**+$' + str(round(self.openGain,2)) + '**' + ' (' + self.gainPerc + ')'
-
                         else:
+                            # debug purposes
+                            print(self.openGain)
+                            print(self.buyVal)
+                            print(self.sellVal)
                             self.gainText = '**$0**'
 
                         self.embed.add_embed_field(name='Realized Gain', value=self.gainText)
