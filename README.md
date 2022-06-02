@@ -32,7 +32,7 @@
 The bot is derived from the algorithms which empower Nyria's dip - buying alert bots.
 It's been made open source to strive for transparent and effecient community development,
 so Nyria can build a trust - driven ecosystem and environment around the creation,
-improvement, and public relase of the bot as a product.
+improvement, and public release of the bot as a product.
 
 > If you are interested in developing
 > this project under Nyria, or have
