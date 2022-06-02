@@ -27,11 +27,11 @@ It's been made open source to strive for transparent and effecient community dev
 so Nyria can build a trust - driven ecosystem and environment around the creation,
 improvement, and public relase of the bot as a product.
 
-> If you are interested in developing
-> this project under Nyria, or have
-> contributions you would like
-> published in the public version,
-> plase email me at 
+> If you are interested in developing\n
+> this project under Nyria, or have\n
+> contributions you would like\n
+> published in the public version,\n
+> plase email me at \n
 [michael@alwaysascending.io](mailto:michael@alwaysascending.io).
 
 
@@ -73,12 +73,6 @@ discordwebhook = 'https://discord.com/api/webhooks/xxxxxxxxxxxxxx/xxxxxx'
 
 **IMPORTANT: If you do not want the bot place trades for you, set devMode to True**.
 
-<iframe
-  src="https://carbon.now.sh/embed?bg=rgba%28171%2C+184%2C+195%2C+1%29&t=seti&wt=none&l=auto&width=680&ds=true&dsyoff=20px&dsblur=68px&wc=true&wa=true&pv=56px&ph=56px&ln=false&fl=1&fm=Hack&fs=14px&lh=133%25&si=false&es=2x&wm=false&code=%250AapiKey%2520%253D%2520%270uhvKjxxxxxcIHib8xjFS-6xxxh6GQp%27%250A%250AapiSecret%2520%253D%2520%27ccGQbvxxxGfCAGnA3ftxxxxv_Q81pS%27%250A%250Adiscordwebhook%2520%253D%2520%27https%253A%252F%252Fdiscord.com%252Fapi%252Fwebhooks%252Fxxxxxxxxxxxxxxxxx%252FpD2D7gabdPlxxAxyaf3xxorR3fyMutlpaxxzxx3AJQd66A-jL%27%250A%250AdevMode%2520%253D%2520True"
-  style="width: 979px; height: 372px; border:0; transform: scale(1); overflow:hidden;"
-  sandbox="allow-scripts allow-same-origin"></iframe>
-
-
 **From here, you should be able to run the bot by executing the 'moneyprinter.py' script.**
 
 
@@ -88,7 +82,7 @@ discordwebhook = 'https://discord.com/api/webhooks/xxxxxxxxxxxxxx/xxxxxx'
 Want to contribute? Great! 
 
 Submit any pull requests you feel are critical to the general function of the bot.
-Otherwise, feel free to shoot me any email to Discord this project more!
+Otherwise, feel free to shoot me an email to discuss this project more!
 
 [michael@alwaysascending.io](emailto:michael@alwaysascending.io)
 
