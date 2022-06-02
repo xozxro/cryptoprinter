@@ -1,11 +1,13 @@
-# Nyria's Crypto Printer
+![ezcv logo](https://raw.githubusercontent.com/xozxro/cryptoprinter/main/Crypto_Printer.png)
+
 ## _The Last Project You'll Ever Need._
 
 
 ![Twitter URL](https://img.shields.io/twitter/url?style=social)
 ![Discord](https://img.shields.io/discord/836723167690883103?style=flat-square)
 
-**Nyria's cryptocurrency trading bot is an open source, fully customizable day trading bot written in Python by [zxro](https://twitter.com/xozxro).**
+#### **Nyria's cryptocurrency trading bot is an open source, fully customizable day trading bot.**
+**Written in Python by [zxro](https://twitter.com/xozxro) under [Nyria LLC](https://nyriabot.io).**
 
 
 ## *Planned Features*
