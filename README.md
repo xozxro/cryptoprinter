@@ -2,12 +2,16 @@
 
 ## _The Last Project You'll Ever Need._
 
+----------------
 
-![Twitter URL](https://img.shields.io/twitter/url?style=social)
-![Discord](https://img.shields.io/discord/836723167690883103?style=flat-square)
+![Twitter Follow](https://img.shields.io/twitter/follow/NyriaStocks?style=for-the-badge)
+![Discord](https://img.shields.io/discord/836723167690883103?style=for-the-badge)
+
 
 #### **Nyria's cryptocurrency trading bot is an open source, fully customizable day trading bot.**
 **Written in Python by [zxro](https://twitter.com/xozxro) under [Nyria LLC](https://nyriabot.io).**
+
+
 
 
 ## *Planned Features*
