@@ -6,7 +6,7 @@
 
 [![Twitter Follow](https://img.shields.io/twitter/follow/NyriaStocks?style=for-the-badge)](https://twitter.com/xozxro)
 
-![Discord](https://img.shields.io/discord/836723167690883103?style=for-the-badge)(https://discord.gg/QJQqRUHk)
+[![Discord](https://img.shields.io/discord/836723167690883103?style=for-the-badge)](https://discord.gg/QJQqRUHk)
 
 
 #### **Nyria's cryptocurrency trading bot is an open source, fully customizable day trading bot.**
