@@ -27,11 +27,11 @@ It's been made open source to strive for transparent and effecient community dev
 so Nyria can build a trust - driven ecosystem and environment around the creation,
 improvement, and public relase of the bot as a product.
 
-> If you are interested in developing\n
-> this project under Nyria, or have\n
-> contributions you would like\n
-> published in the public version,\n
-> plase email me at \n
+> If you are interested in developing
+> this project under Nyria, or have
+> contributions you would like
+> published in the public version,
+> plase email me at 
 [michael@alwaysascending.io](mailto:michael@alwaysascending.io).
 
 
@@ -72,6 +72,8 @@ discordwebhook = 'https://discord.com/api/webhooks/xxxxxxxxxxxxxx/xxxxxx'
 ```
 
 **IMPORTANT: If you do not want the bot place trades for you, set devMode to True**.
+
+
 
 **From here, you should be able to run the bot by executing the 'moneyprinter.py' script.**
 
