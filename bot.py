@@ -286,6 +286,8 @@ class tradebot():
 
         self.logData()
 
+        self.openGain = self.openVal - self.buyVal
+
         self.webhook = DiscordWebhook(url=self.url, username='Nyria', content='')
         self.embed = DiscordEmbed(title='[STATUS UPDATE]', description='', color='4200FF')
         self.embed.add_embed_field(name='Time', value=str(time.strftime("%H:%M")))
@@ -300,12 +302,14 @@ class tradebot():
 
         if self.openGain > 0:
             self.gainPerc = '+' + str(round((self.openGain / self.buyVal) * 100, 2)) + '%'
-            self.gainText = '**+$' + str(round(self.openGain)) + '**' + ' (' + self.gainPerc + ')'
+            self.gainText = '**+$' + str(round(self.openGain,2)) + '**' + ' (' + self.gainPerc + ')'
 
         else:
             self.gainText = '**$0**'
 
         self.embed.add_embed_field(name='Open Gain', value=self.gainText)
+
+        self.dayGain = self.accountBalance - self.startingBal
 
         if self.dayGain < 0:
             gainPerc = '-' + str(round((abs(self.dayGain) / self.startingBal) * 100, 2)) + '%'
@@ -399,7 +403,7 @@ class tradebot():
                             # debug purposes
                             print(self.openGain)
                             print(self.buyVal)
-                            print(self.sellVal)
+                            print(self.soldVal)
                             self.gainText = '**$0**'
 
                         self.embed.add_embed_field(name='Realized Gain', value=self.gainText)
