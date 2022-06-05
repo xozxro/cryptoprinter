@@ -5,7 +5,7 @@ import data
 from datetime import datetime
 import time
 import csv
-from alpha_vantage.timeseries import TimeSeries
+#from alpha_vantage.timeseries import TimeSeries
 from bot import tradebot
 import traceback
 
@@ -19,8 +19,6 @@ import traceback
 # feel free to fork and edit as you please.
 #
 # [nyriabot.io]
-
-
 
 
 def makeTrade(tradearray,trends,type):
@@ -178,7 +176,7 @@ def compareForEntry(previous,dataDict):
 
 
 
-ts = TimeSeries(key='MTRZCHDVXHJJTONU',output_format='pandas')
+#ts = TimeSeries(key='MTRZCHDVXHJJTONU',output_format='pandas')
 
 
 # set other variables

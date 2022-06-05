@@ -296,18 +296,19 @@ class tradebot():
         self.embed.add_embed_field(name='Open QT', value='x **' + str(self.openQT) + '**')
         self.embed.add_embed_field(name='Market Value', value='$' + str(round(self.openVal,2)))
 
-        if self.soldVal < self.buyVal:
+        if self.openVal < self.buyVal:
                             self.gainPerc = '-' + str(round((abs(self.openGain) / self.buyVal) * 100,2)) + '%'
                             self.gainText = '**-$' + str(round(abs(self.openGain),2)) + '**' + ' (' + self.gainPerc + ')'
 
-        if self.soldVal > self.buyVal:
+        if self.openVal > self.buyVal:
             self.gainPerc = '+' + str(round((self.openGain / self.buyVal) * 100,2)) + '%'
             self.gainText = '**+$' + str(round(self.openGain,2)) + '**' + ' (' + self.gainPerc + ')'
         else:
             # debug purposes
             print(self.openGain)
             print(self.buyVal)
-            print(self.soldVal)
+            try: print(self.soldVal) 
+            except: pass
             self.gainText = '**$0**'
 
         self.embed.add_embed_field(name='Open Gain', value=self.gainText)
